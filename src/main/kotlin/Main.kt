@@ -27,33 +27,107 @@ import kotlinx.coroutines.*
 //}
 
 
+
+
 //chapter3
-fun main() {
-    runBlocking {
-        println("Weather forecast")
-        println(getWeatherReport())
-        println("Have a good day!")
-    }
-}
+//fun main() {
+//    runBlocking {
+//        println("Weather forecast")
+//        println(getWeatherReport())
+//        println("Have a good day!")
+//    }
+//}
+//
+////이것을 병렬분해라고 한다.
+////coroutineScope 함수는 이 함수를 사용하는 scope의 coroutine context를 상속 받는다.
+////이 예제에서는 runBlocking의 coroutine context를 받는다.
+//suspend fun getWeatherReport() = coroutineScope {
+//    //launch와는 다르게 결과 값을 반환할 수 있는 async 이다. 값으로 Deferred를 반환한다.
+//    //Deferred는 launch가 반환하는 Job을 상속한 클래스이다. 다만 반환값이 있다.
+//    val forecast = async { getForecast() }
+//    val temperature = async { getTemperature() }
+//    //await은 deferred가 끝날때 까지 기다리고, 그 결과값을 반환한다. 이곳에서는 두 deferred 모두를 기다리기 때문에 둘다 기다린 후 string을 반환한다.
+//    "${forecast.await()} ${temperature.await()}"
+//}
+//
+//suspend fun getForecast(): String {
+//    delay(1000)
+//    return "Sunny"
+//}
+//
+//suspend fun getTemperature(): String {
+//    delay(1000)
+//    return "30\u00b0C"
+//}
 
-//이것을 병렬분해라고 한다.
-//coroutineScope 함수는 이 함수를 사용하는 scope의 coroutine context를 상속 받는다.
-//이 예제에서는 runBlocking의 coroutine context를 받는다.
-suspend fun getWeatherReport() = coroutineScope {
-    //launch와는 다르게 결과 값을 반환할 수 있는 async 이다. 값으로 Deferred를 반환한다.
-    //Deferred는 launch가 반환하는 Job을 상속한 클래스이다. 다만 반환값이 있다.
-    val forecast = async { getForecast() }
-    val temperature = async { getTemperature() }
-    //await은 deferred가 끝날때 까지 기다리고, 그 결과값을 반환한다. 이곳에서는 두 deferred 모두를 기다리기 때문에 둘다 기다린 후 string을 반환한다.
-    "${forecast.await()} ${temperature.await()}"
-}
 
-suspend fun getForecast(): String {
-    delay(1000)
-    return "Sunny"
-}
 
-suspend fun getTemperature(): String {
-    delay(1000)
-    return "30\u00b0C"
-}
+
+//chapter 4
+
+//fun main() {
+//    runBlocking {
+//        println("Weather forecast")
+//        println(getWeatherReport())
+//        println("Have a good day!")
+//    }
+//}
+//
+//suspend fun getWeatherReport() = coroutineScope {
+//    val forecast = async { getForecast() }
+//    val temperature = async {
+//        //예외처리를 하는 try catch문도 아래와 같이 coroutine 안에 넣을 수 있다.
+//        try {
+//            getTemperature()
+//        } catch (e: AssertionError) {
+//            println("Caught exception $e")
+//            "{ No temperature found }"
+//        }
+//    }
+//
+//    "${forecast.await()} ${temperature.await()}"
+//}
+//
+//suspend fun getForecast(): String {
+//    delay(1000)
+//    return "Sunny"
+//}
+//
+//suspend fun getTemperature(): String {
+//    delay(500)
+//    throw AssertionError("Temperature is invalid")
+//    return "30\u00b0C"
+//}
+
+
+
+//fun main() {
+//    runBlocking {
+//        println("Weather forecast")
+//        println(getWeatherReport())
+//        println("Have a good day!")
+//    }
+//}
+//
+//suspend fun getWeatherReport() = coroutineScope {
+//    val forecast = async { getForecast() }
+//    val temperature = async { getTemperature() }
+//
+//    delay(200)
+//
+//    //코루틴을 취소하는 cancel()함수이다.
+//    //코루틴은 취소될 수 있지만 같은 범위의 다른 코루틴에는 영향이 없고 상위 코루틴은 취소되지 않는다.
+//    temperature.cancel()
+//
+//    forecast.await()
+//}
+//
+//suspend fun getForecast(): String {
+//    delay(1000)
+//    return "Sunny"
+//}
+//
+//suspend fun getTemperature(): String {
+//    delay(1000)
+//    return "30\u00b0C"
+//}
